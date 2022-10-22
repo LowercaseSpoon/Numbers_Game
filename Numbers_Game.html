@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Numbers Game</title>
+  </head>
+  <body>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+
+    <label for="guessField">Choose a number between 1 and 1000:</label>
+    <input type="text" id="guessField" class="guessField">
+    <input type="submit" name="" value="Submit Guess" class="guessSubmit">
+
+    <script type="text/javascript">
+
+    let randomNumber = Math.floor(Math.random() * 1000) + 1;
+
+    let guesses = document.querySelector('.guesses');
+    let lastResult = document.querySelector('.lastResult');
+    let lowOrHi = document.querySelector('.lowOrHi');
+
+    let guessSubmit = document.querySelector('.guessSubmit');
+    let guessField = document.querySelector('.guessField');
+
+    let guessCount = 1;
+    let resetButton;
+
+
+    function checkGuess() {
+
+      let userGuess = Number(guessField.value);
+      if (guessCount === 1){
+        guesses.textContent = 'Previous Guesses: ';
+        guesses.style.backgroundColor = 'yellow';
+        guesses.style.fontSize = '200%';
+        guesses.style.padding = '10px';
+        guesses.style.boxShadow = '3px 3px 6px black';
+      }
+      guesses.textContent += userGuess + ',';
+
+      if (userGuess === randomNumber){
+        lastResult.textContent = 'Congratulations! You got it right!';
+        lastResult.style.backgroundColor = 'green';
+        lowOrHi.textContent = '';
+
+        lastResult.style.fontSize = '200%';
+        lastResult.style.padding = '10px';
+        lastResult.style.boxShadow = '3px 3px 6px black';
+        setGameOver();
+      }
+      else if (guessCount === 10){
+        lastResult.textContent = 'Game Over!';
+        setGameOver();
+      }
+      else{
+        lastResult.textContent = 'Wrong!';
+        lastResult.style.backgroundColor = 'red';
+        lastResult.style.fontSize = '200%';
+        lastResult.style.padding = '10px';
+        lastResult.style.boxShadow = '3px 3px 6px black';
+
+        if(userGuess < randomNumber){
+          lowOrHi.textContent = 'Last guess was too low!';
+        }
+        else if(userGuess > randomNumber){
+          lowOrHi.textContent = 'Last guess was too high!';
+        }
+      }
+
+      guessCount++;
+      guessField.value = '';
+      guessField.focus();
+    }
+
+    guessSubmit.addEventListener('click', checkGuess);
+
+    function setGameOver() {
+
+      guessField.disabled = true;
+      guessSubmit.disabled = true;
+      resetButton = document.createElement('button');
+      resetButton.textContent = 'Start New Game';
+      document.body.append(resetButton);
+      resetButton.addEventListener('click', resetGame);
+
+
+    }
+
+    function resetGame(){
+
+      guessCount = 1;
+
+      let resetParas = document.querySelectorAll('.resultParas p');
+      for (let i = 0 ; i < resetParas.length ; i++){
+        resetParas[i].textContent = '';
+      }
+
+      resetButton.parentNode.removeChild(resetButton);
+
+      guessField.disabled = false;
+      guessSubmit.disabled = false;
+      guessField.value = '';
+      guessField.focus();
+
+      lastResult.style.backgroundColor = 'white';
+
+      randomNumber = Math.floor(Math.random() * 100) + 1;
+    }
+
+    console.log(randomNumber);
+    </script>
+  </body>
+</html>
